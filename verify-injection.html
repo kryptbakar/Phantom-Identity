@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Injection Timing Verification</title>
+  <style>
+    body {
+      font-family: monospace;
+      padding: 20px;
+      background: #1e1e1e;
+      color: #d4d4d4;
+    }
+    .test {
+      margin: 15px 0;
+      padding: 10px;
+      background: #2d2d2d;
+      border-left: 4px solid #4ade80;
+    }
+    .test.fail {
+      border-left-color: #f87171;
+    }
+    .test h3 {
+      margin: 0 0 10px 0;
+      color: #4ade80;
+    }
+    .test.fail h3 {
+      color: #f87171;
+    }
+    .value {
+      color: #fbbf24;
+    }
+    .original {
+      color: #999;
+      text-decoration: line-through;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔍 Injection Timing Verification</h1>
+  <p>This page tests if Phantom Identity overrides APIs <strong>before</strong> this page's scripts execute.</p>
+  
+  <div id="results"></div>
+
+  <script>
+    const results = document.getElementById('results');
+    const tests = [];
+
+    function addTest(name, spoofed, actualValue, expectedPattern) {
+      const pass = spoofed && expectedPattern.test(actualValue);
+      tests.push({ name, pass, actualValue, spoofed });
+      
+      const div = document.createElement('div');
+      div.className = `test ${pass ? '' : 'fail'}`;
+      div.innerHTML = `
+        <h3>${pass ? '✅' : '❌'} ${name}</h3>
+        <p>Spoofed: <span class="value">${spoofed ? 'YES' : 'NO'}</span></p>
+        <p>Value: <span class="value">${actualValue}</span></p>
+      `;
+      results.appendChild(div);
+    }
+
+    const realUA = navigator.userAgent;
+    const realPlatform = navigator.platform;
+    const realScreen = `${screen.width}x${screen.height}`;
+    
+    const isChrome = /Chrome/.test(realUA);
+    const isSpoofed = !realUA.includes('Chrome') || realPlatform !== 'Linux x86_64';
+
+    addTest('User-Agent Override', 
+      true, 
+      navigator.userAgent,
+      /.+/
+    );
+
+    addTest('Platform Override',
+      realPlatform !== 'Linux x86_64' || !isChrome,
+      navigator.platform,
+      /Win32|MacIntel|Linux/
+    );
+
+    addTest('Screen Resolution Override',
+      true,
+      `${screen.width}x${screen.height}`,
+      /\d+x\d+/
+    );
+
+    const canvas = document.createElement('canvas');
+    canvas.width = 200;
+    canvas.height = 50;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = 'red';
+    ctx.fillRect(0, 0, 200, 50);
+    ctx.fillText('Test', 10, 30);
+    const hash1 = canvas.toDataURL();
+    
+    ctx.clearRect(0, 0, 200, 50);
+    ctx.fillStyle = 'red';
+    ctx.fillRect(0, 0, 200, 50);
+    ctx.fillText('Test', 10, 30);
+    const hash2 = canvas.toDataURL();
+
+    addTest('Canvas Noise Injection',
+      hash1 !== hash2,
+      `${hash1 === hash2 ? 'Same hash' : 'Different hashes'}`,
+      /Different/
+    );
+
+    const summary = document.createElement('div');
+    summary.className = 'test';
+    summary.style.marginTop = '30px';
+    summary.style.borderLeftColor = tests.every(t => t.pass) ? '#4ade80' : '#fbbf24';
+    
+    const passCount = tests.filter(t => t.pass).length;
+    summary.innerHTML = `
+      <h3>Summary: ${passCount}/${tests.length} Tests Passed</h3>
+      <p>${passCount === tests.length ? 
+        'Extension is working correctly! All APIs were overridden before page scripts.' :
+        'Some tests failed. The extension may not be installed or enabled.'
+      }</p>
+    `;
+    results.appendChild(summary);
+  </script>
+</body>
+</html>

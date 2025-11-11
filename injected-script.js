@@ -1,7 +1,8 @@
 (function() {
   'use strict';
 
-  const spoofConfig = JSON.parse(document.documentElement.dataset.spoofConfig || '{}');
+  const spoofConfig = window.__PHANTOM_SPOOF_CONFIG__ || {};
+  delete window.__PHANTOM_SPOOF_CONFIG__;
   
   if (!spoofConfig.enabled) return;
 
@@ -160,6 +161,4 @@
       get: () => spoofConfig.deviceMemory
     });
   }
-
-  document.documentElement.removeAttribute('data-spoof-config');
 })();

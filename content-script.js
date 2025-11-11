@@ -12,9 +12,13 @@
 
   const spoofConfig = await generateSpoofConfig();
   
+  const inlineScript = document.createElement('script');
+  inlineScript.textContent = `window.__PHANTOM_SPOOF_CONFIG__ = ${JSON.stringify(spoofConfig)};`;
+  (document.head || document.documentElement).appendChild(inlineScript);
+  inlineScript.remove();
+  
   const script = document.createElement('script');
   script.src = chrome.runtime.getURL('injected-script.js');
-  document.documentElement.dataset.spoofConfig = JSON.stringify(spoofConfig);
   (document.head || document.documentElement).appendChild(script);
   script.onload = () => script.remove();
 
