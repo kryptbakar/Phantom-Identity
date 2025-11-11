@@ -1,0 +1,14 @@
+.replit
+.cache/
+.local/
+.git/
+__pycache__/
+*.pyc
+*.pyo
+*.log
+.DS_Store
+Thumbs.db
+node_modules/
+.env
+.venv/
+venv/

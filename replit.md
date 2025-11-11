@@ -52,13 +52,15 @@ Complete MVP implementation with all core features:
 - Session statistics tracking
 
 ## Recent Changes
-- 2025-11-11: Initial implementation of complete MVP
-  - Created all core extension files
-  - Implemented fingerprint spoofing for major vectors
-  - Built privacy dashboard with scoring system
-  - Added comprehensive test page
-  - Generated extension icon
-  - Documented usage and installation
+- 2025-11-11: Complete MVP implementation with critical bug fix
+  - Created all core extension files (manifest, background, content, injected scripts)
+  - Implemented fingerprint spoofing for major vectors (Navigator, Canvas, WebGL, Screen)
+  - Built privacy dashboard with real-time anonymity scoring
+  - Added comprehensive test page and injection verification page
+  - Generated extension icon and project homepage
+  - Fixed critical timing bug: inline script now loads spoofConfig before injected-script.js executes
+  - Verified with architect review: API overrides properly execute at document_start
+  - Complete documentation (README, INSTALLATION, PROJECT_SUMMARY)
 
 ## User Preferences
 None specified yet.

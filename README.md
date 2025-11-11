@@ -52,14 +52,20 @@ A sophisticated browser extension that protects your privacy through intelligent
 
 ## Testing Your Protection
 
-### Built-in Test Page
-Click "Test Fingerprint" in the popup to open a comprehensive test page that displays:
+### Built-in Test Pages
+
+**Main Test Page** - Click "Test Fingerprint" in the popup to open a comprehensive test page that displays:
 - Current navigator properties
 - Screen information
 - Canvas fingerprint hash
 - WebGL information
 
-Reload the page multiple times to verify randomization is working.
+**Injection Verification** - Open `verify-injection.html` to confirm API overrides execute before page scripts:
+- Tests if User-Agent, Platform, Screen, and Canvas are properly spoofed
+- Verifies timing of injected script execution
+- Shows pass/fail status for each override
+
+Reload the pages multiple times to verify randomization is working.
 
 ### External Testing Tools
 - **[EFF Cover Your Tracks](https://coveryourtracks.eff.org/)** - Comprehensive fingerprinting test
