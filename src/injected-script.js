@@ -122,32 +122,43 @@
   }
 
   if (spoofConfig.webglSpoofing) {
-    const getParameter = WebGLRenderingContext.prototype.getParameter;
-    const getParameterWebGL2 = WebGL2RenderingContext.prototype.getParameter;
+    const hasWebGL = typeof WebGLRenderingContext !== 'undefined';
+    const hasWebGL2 = typeof WebGL2RenderingContext !== 'undefined';
 
-    const spoofedParams = {
-      37445: 'Intel Inc.',
-      37446: 'Intel Iris OpenGL Engine',
-      7936: 'WebKit',
-      7937: 'WebKit WebGL',
-      35724: 16,
-      34076: 16384,
-      34024: 16384,
-      3379: 16384,
-      36349: 1024,
-      33902: [1, 8192],
-      33901: [1, 8192]
-    };
+    if (hasWebGL || hasWebGL2) {
+      const spoofedParams = {
+        37445: 'Intel Inc.',
+        37446: 'Intel Iris OpenGL Engine',
+        7936: 'WebKit',
+        7937: 'WebKit WebGL',
+        35724: 16,
+        34076: 16384,
+        34024: 16384,
+        3379: 16384,
+        36349: 1024,
+        33902: [1, 8192],
+        33901: [1, 8192]
+      };
 
-    function spoofGetParameter(param) {
-      if (spoofedParams[param] !== undefined) {
-        return spoofedParams[param];
+      function createSpoofedGetter(originalGetter) {
+        return function(param) {
+          if (spoofedParams[param] !== undefined) {
+            return spoofedParams[param];
+          }
+          return originalGetter ? originalGetter.call(this, param) : undefined;
+        };
       }
-      return getParameter.call(this, param);
-    }
 
-    WebGLRenderingContext.prototype.getParameter = spoofGetParameter;
-    WebGL2RenderingContext.prototype.getParameter = spoofGetParameter;
+      if (hasWebGL) {
+        const originalGetParameter = WebGLRenderingContext.prototype.getParameter;
+        WebGLRenderingContext.prototype.getParameter = createSpoofedGetter(originalGetParameter);
+      }
+
+      if (hasWebGL2) {
+        const originalGetParameterWebGL2 = WebGL2RenderingContext.prototype.getParameter;
+        WebGL2RenderingContext.prototype.getParameter = createSpoofedGetter(originalGetParameterWebGL2);
+      }
+    }
   }
 
   if (spoofConfig.hardwareConcurrency) {

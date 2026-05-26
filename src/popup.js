@@ -78,11 +78,11 @@ function updateScoreCircle(score) {
   circle.style.strokeDashoffset = offset;
   
   if (score >= 70) {
-    circle.style.stroke = '#4ade80';
+    circle.style.stroke = '#14b8a6';
   } else if (score >= 40) {
-    circle.style.stroke = '#fbbf24';
+    circle.style.stroke = '#f59e0b';
   } else {
-    circle.style.stroke = '#f87171';
+    circle.style.stroke = '#ef4444';
   }
 }
 

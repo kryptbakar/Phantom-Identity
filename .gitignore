@@ -1,14 +1,41 @@
-.replit
-.cache/
-.local/
-.git/
+# IDE & Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Python
 __pycache__/
 *.pyc
 *.pyo
-*.log
-.DS_Store
-Thumbs.db
-node_modules/
+*.py[cod]
+*$py.class
 .env
 .venv/
 venv/
+ENV/
+build/
+dist/
+*.egg-info/
+
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+
+# OS
+.DS_Store
+Thumbs.db
+.cache/
+
+# Project
+.replit
+.local/
+.git/
+*.log
+
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/

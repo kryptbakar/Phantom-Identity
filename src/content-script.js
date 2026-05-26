@@ -87,13 +87,19 @@
   }
 
   if (settings.behaviorSimulation) {
-    simulateHumanBehavior();
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+      simulateHumanBehavior();
+    } else {
+      document.addEventListener('DOMContentLoaded', simulateHumanBehavior, { once: true });
+    }
   }
 
   function simulateHumanBehavior() {
     const randomDelay = (min, max) => Math.random() * (max - min) + min;
 
     setTimeout(() => {
+      if (!document.body) return;
+
       const scrollAmount = Math.random() * 0.4 * document.body.scrollHeight;
       const scrollDuration = randomDelay(1000, 3000);
       const startTime = Date.now();
@@ -113,6 +119,7 @@
         }
       }
 
+      recordBehaviorEvent();
       smoothScroll();
     }, randomDelay(5000, 15000));
 
@@ -123,6 +130,8 @@
       const targetX = Math.random() * window.innerWidth;
       const targetY = Math.random() * window.innerHeight;
       const steps = 20 + Math.random() * 30;
+
+      recordBehaviorEvent();
 
       for (let i = 0; i < steps; i++) {
         setTimeout(() => {
@@ -145,6 +154,17 @@
     }
 
     setTimeout(simulateMouseMovement, randomDelay(3000, 8000));
+  }
+
+  function recordBehaviorEvent() {
+    try {
+      chrome.runtime.sendMessage({ type: 'behavioralEvent' }, () => {
+        // Silence potential "receiving end does not exist" errors when popup/background unavailable.
+        void chrome.runtime.lastError;
+      });
+    } catch (error) {
+      // No-op: messaging can fail if the extension context is unloading.
+    }
   }
 
   chrome.runtime.sendMessage({ 

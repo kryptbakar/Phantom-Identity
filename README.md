@@ -1,8 +1,8 @@
 # Phantom Identity - Privacy Browser Extension
 
-A sophisticated browser extension that protects your privacy through intelligent fingerprint randomization and behavioral simulation.
+A sophisticated Chrome extension that protects your privacy through intelligent fingerprint randomization and behavioral simulation.
 
-## Features
+## 🛡️ Features
 
 ### Fingerprint Spoofing
 - **User-Agent & Platform Randomization**: Dynamically changes browser identification
@@ -23,163 +23,106 @@ A sophisticated browser extension that protects your privacy through intelligent
 - **Session Statistics**: Track fingerprint changes and behavioral events
 - **Granular Controls**: Toggle individual protection features
 
-## Installation
+## 📦 Project Structure
+
+```
+phantom-identity/
+├── src/                      # Extension source code
+│   ├── background.js         # Service worker
+│   ├── content-script.js     # Content injection script
+│   ├── injected-script.js    # Web-accessible script
+│   ├── popup.js              # Popup script
+│   ├── popup.html            # Dashboard UI
+│   ├── popup.css             # Styling
+│   ├── index.html            # Index page
+│   └── manifest.json         # Extension manifest (Manifest V3)
+├── public/
+│   └── icons/                # Extension icons
+├── tests/                    # Test files
+│   ├── test.html
+│   ├── test.js
+│   └── verify-injection.html
+├── docs/                     # Documentation
+│   ├── INSTALLATION.md
+│   ├── PROJECT_SUMMARY.md
+│   └── README_OLD.md
+├── assets/                   # Project assets
+├── server.py                 # Development server
+└── .gitignore               # Git ignore rules
+```
+
+## 🚀 Installation
 
 ### Chrome/Edge (Manifest V3)
 
-1. Clone or download this repository
-2. Open Chrome/Edge and navigate to `chrome://extensions/`
-3. Enable "Developer mode" (toggle in top-right corner)
-4. Click "Load unpacked"
-5. Select the `phantom-identity` folder
-6. The extension icon should appear in your browser toolbar
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/yourusername/phantom-identity.git
+   cd phantom-identity
+   ```
 
-### Firefox (WebExtensions)
+2. Open Chrome/Edge and go to `chrome://extensions/`
 
-1. Clone or download this repository
-2. Open Firefox and navigate to `about:debugging#/runtime/this-firefox`
-3. Click "Load Temporary Add-on"
-4. Select the `manifest.json` file from the extension folder
-5. The extension will be active for the current session
+3. Enable **Developer mode** (top right)
 
-## Usage
+4. Click **Load unpacked**
 
-1. **Click the extension icon** to open the privacy dashboard
-2. **View your anonymity score** - Higher is better (70+ = Good)
-3. **Check current fingerprint** - Shows your spoofed identity
-4. **Toggle protection features** - Enable/disable specific spoofing methods
-5. **Test your protection** - Click "Test Fingerprint" to open the test page
+5. Select the `src` folder from this project
 
-## Testing Your Protection
+6. The extension is now installed! Click the icon in your toolbar to open the dashboard
 
-### Built-in Test Pages
+### Firefox (coming soon)
 
-**Main Test Page** - Click "Test Fingerprint" in the popup to open a comprehensive test page that displays:
-- Current navigator properties
-- Screen information
-- Canvas fingerprint hash
-- WebGL information
+Firefox compatibility will require adapting the code to Manifest V2/MV3 Firefox standards.
 
-**Injection Verification** - Open `verify-injection.html` to confirm API overrides execute before page scripts:
-- Tests if User-Agent, Platform, Screen, and Canvas are properly spoofed
-- Verifies timing of injected script execution
-- Shows pass/fail status for each override
+## 📖 Documentation
 
-Reload the pages multiple times to verify randomization is working.
+- [Installation Guide](docs/INSTALLATION.md)
+- [Project Summary](docs/PROJECT_SUMMARY.md)
+- [Original README](docs/README_OLD.md)
 
-### External Testing Tools
-- **[EFF Cover Your Tracks](https://coveryourtracks.eff.org/)** - Comprehensive fingerprinting test
-- **[BrowserLeaks](https://browserleaks.com/)** - Detailed browser analysis
-- **[AmIUnique](https://amiunique.org/)** - Browser uniqueness testing
+## 🔧 Development
 
-## How It Works
+### Requirements
+- Chrome/Edge browser with extension support
+- Modern JavaScript (ES6+)
+- Optional: Python 3.x (for `server.py`)
 
-### Injection Strategy
-The extension uses a three-layer approach:
+### Local Testing
 
-1. **Content Script** (`content-script.js`) - Injected into every page
-2. **Injected Script** (`injected-script.js`) - Runs in page context before other scripts
-3. **Background Worker** (`background.js`) - Manages settings and statistics
+1. Make changes in the `src/` folder
+2. Go to `chrome://extensions/`
+3. Click **Reload** on the Phantom Identity extension
+4. Test in the popup dashboard
 
-### API Interception
-Before any tracking scripts load, the extension:
-- Overrides `Navigator` properties using `Object.defineProperty`
-- Intercepts Canvas and WebGL API calls
-- Adds randomized noise to fingerprinting methods
-- Simulates human behavior with DOM events
+## 🧪 Testing
 
-### Plausibility Engine
-Values are randomized from a curated list of real device/OS combinations to ensure:
-- Spoofed User-Agent matches expected screen resolution
-- Platform-specific properties align correctly
-- Hardware specs are realistic for the spoofed device
+Test files are located in the `tests/` directory:
+- `test.html` - Manual testing interface
+- `test.js` - Test utilities
+- `verify-injection.html` - Injection verification tests
 
-## Privacy Policy
+## 🔒 Privacy & Security
 
-**Phantom Identity is 100% local and private:**
-- ✅ All processing happens in your browser
-- ✅ No data is collected, stored, or transmitted
-- ✅ No external servers or APIs
-- ✅ No analytics or tracking
-- ✅ Completely open source
+This extension:
+- ✅ Works entirely offline
+- ✅ Never collects user data
+- ✅ No external API calls
+- ✅ Open source for full transparency
+- ✅ Randomizes fingerprints on every page load
 
-## Configuration
+## 📝 License
 
-### Default Settings
-```javascript
-{
-  enabled: true,
-  canvasSpoofing: true,
-  webglSpoofing: true,
-  behaviorSimulation: true
-}
-```
+MIT License - See LICENSE file for details
 
-Settings are stored locally using Chrome's `storage.sync` API and persist across sessions.
+## 🤝 Contributing
 
-## Development
+Contributions are welcome! Please feel free to submit pull requests or open issues for bugs and feature requests.
 
-### Project Structure
-```
-phantom-identity/
-├── manifest.json           # Extension configuration
-├── background.js           # Service worker
-├── content-script.js       # Page injection logic
-├── injected-script.js      # API interception
-├── popup.html              # Dashboard UI
-├── popup.css               # Dashboard styles
-├── popup.js                # Dashboard logic
-├── test.html               # Fingerprint test page
-├── icons/                  # Extension icons
-└── README.md               # Documentation
-```
+## ⚠️ Disclaimer
 
-### Key Technical Considerations
-
-**Canvas Spoofing**: Adds subtle pixel noise (0.1 max variance) to avoid obvious detection while changing the fingerprint hash.
-
-**WebGL Spoofing**: Returns generic hardware information instead of real GPU details.
-
-**Behavioral Simulation**: Uses `requestAnimationFrame` for smooth mouse movements and easing functions for natural scrolling.
-
-## Limitations
-
-- **Website Compatibility**: Some sites may behave unexpectedly with spoofed values
-- **Detection Risk**: Advanced fingerprinting may detect the extension itself
-- **Performance**: Minimal impact, but behavioral simulation uses CPU cycles
-- **Manifest V3**: Background script cannot make network requests in MV3
-
-## Ethical Use
-
-This tool is designed for **legitimate privacy protection**. Please use responsibly:
-
-✅ **Appropriate Uses**:
-- Protecting personal privacy while browsing
-- Testing your own websites for fingerprinting
-- Security research and education
-- Avoiding invasive tracking
-
-❌ **Inappropriate Uses**:
-- Circumventing security measures
-- Fraudulent activities
-- Terms of service violations
-- Impersonation or deception
-
-## Contributing
-
-This is an open-source project. Contributions are welcome!
-
-## License
-
-MIT License - Free to use, modify, and distribute.
-
-## Acknowledgments
-
-Built following privacy-first principles inspired by:
-- EFF Privacy Badger
-- uBlock Origin
-- Privacy research from academic institutions
+This tool is for privacy and research purposes. Users are responsible for ensuring their use complies with applicable laws and website terms of service.
 
 ---
 
-**Stay Private. Stay Protected. Stay Phantom.** 👻
+**Built with ❤️ for privacy advocates**
